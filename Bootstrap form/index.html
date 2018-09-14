@@ -1,0 +1,298 @@
+<?php
+session_start();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Time Pass</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/custom.css">
+</head>
+
+<script src="./js/jquery-3.2.1.slim.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/popper.min.js"></script>
+<script src="./js/bootstrap.min.js"></script>
+<script src="./js/custom.js"></script>
+
+<style>
+* {
+    margin: 0%;
+    padding: 0%;
+}
+
+.fullscreen {
+    min-height: 100%;
+    height: 100%;
+    min-width: 100%;
+    width: 100%;
+}
+
+.fixed {
+    position: fixed;
+}
+
+.fullwidth {
+    min-width: 100%;
+    width: 100%;
+}
+
+.fullheight {
+    min-height: 100%;
+    height: 100%;
+}
+
+.heighttwenty {
+    min-height: 20%;
+    height: 20%;
+}
+
+.blueviolet{
+    background-color: blueviolet;
+}
+
+.roundborder{
+    border:1px solid black;
+    border-radius:25px;
+}
+
+.scroll{
+    overflow:scroll;
+}
+
+.inp80{
+    width:300px;
+}
+
+@media only screen and (max-width:600px) {
+    #tplogo{
+        display:none;
+    }
+    .inp80{
+        width:80%;
+    }
+    #heading{
+        font-size:100px;
+    }
+}
+
+@media only screen and (max-width:480px) {
+    .inp80{
+        width:80%;
+    }
+    #heading{
+        font-size:75px;
+    }
+}
+
+</style>
+
+<script>
+
+$(document).ready( function(){
+
+    $('#login').click(function() {
+        if(validateemail($('#loginemailid').val())&&validatepass($('#loginpassword').val())){
+            $.ajax({
+                type:"POST",
+                url:"./login.php",
+                data:{'loginemailid':$('#loginemailid').val(),'loginpassword':$('#loginpassword').val()},
+                success:function(data){
+                    var res = JSON.parse(data);
+                    if(res.count!=0){
+                        localStorage.setItem('screenname',res.screenname);
+                        localStorage.setItem('profilepicture',res.profilepicture);
+                        window.location.href="./index.php";
+                    }else{
+                        alert('Enter Valid Data to Login');            
+                    }
+                }
+            });
+        }else{
+            alert('Enter Valid Data to Login');
+        }
+    });
+
+    $('#loginemailid').focusout(function(){
+        var text = $('#loginemailid').val();
+        if(!validateemail(text)){
+            $('#loginvemail').show();
+        }else{
+            $('#loginvemail').hide();
+        }
+    });
+
+    $('#loginpassword').focusout(function(){
+        var text = $('#loginpassword').val();
+        if(!validatepass(text)){
+            $('#loginvpassword').show();
+        }else{
+            $('#loginvpassword').hide();
+        }
+    });
+    
+    $('#regemail').focusout(function(){
+        if(validateemail($('#regemail').val())){
+            $('#regemailalert').hide();
+        }else{
+            $('#regemailalert').show();
+        }
+        if(checkemailconsistancy($('#regemail').val())){
+            $('#regemailalert2').hide();
+        }else{
+            $('#regemailalert2').show();
+        }
+    });
+
+    $('#regpassword').focusout(function(){
+        if(validatepass($('#regpassword').val())){
+            $('#regpasswordalert').hide();
+        }else{
+            $('#regpasswordalert').show();
+        }
+    });
+
+    $('#regcpassword').focusout(function(){
+        if($('#regpassword').val()==$('#regcpassword').val()){
+            $('#regcpasswordalert').hide();
+        }else{
+            $('#regcpasswordalert').show();
+        }
+    });
+
+    $('#regscreenname').focusout(function(){
+        if(screennameconsistancy($('#regscreenname').val())){
+            $('#regscreennamealert').hide();
+        }else{
+            $('#regscreennamealert').show();
+        }
+    });
+
+    $('#regprofile').change(function() {
+        var file = $('#regprofile').prop('files')[0];
+        var form_data = new FormData();                  
+        form_data.append('file', file);       
+        $.ajax({
+                url: './upload.php',
+                async: false, 
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: form_data,                         
+                type: 'post',
+                success: function(php_script_response){
+                    if(php_script_response=='false'){
+                        $('#regfilealert').show();
+                    }else{
+                        $('#regfilealert').hide();
+                    }
+                }
+        });
+    });    
+
+    $('#signup').click(function(){
+        if(($('#regemail').val()!="") && 
+        ($('#regscreenname').val()!="") && 
+        ($('#regpassword').val()!="") &&
+        ($('#regcpassword').val()!="")){
+            $.ajax({
+                url: './register.php',
+                async: false,
+                data: {'email':$('#regemail').val(),'password':$('#regpassword').val(),'screenname':$('#regscreenname').val(),'gender':$('input:radio[name=reggender]:checked').val()},
+                type: 'post',
+                success: function(php_script_response){
+                    if(php_script_response!="false"){
+                        localStorage.setItem('screenname',$('#regscreenname').val());
+                        localStorage.setItem('profilepicture',php_script_response);
+                        window.location.href="./index.php";    
+                        alert('Sign Up Successful');
+                    }else{
+                        alert('Enter valid data to register');
+                    }
+                }
+            }); 
+        }else{
+            alert("Enter all fields to register");
+        }
+    });
+    
+    
+
+});
+
+</script>
+
+<body class="fixed">
+<div id="alert"></div>
+<div class="container-fluid fullscreen fixed scroll">
+    <div id="header" class="row">
+        <div class="col-xl-12 blueviolet">
+            <center>
+                <img id="tplogo" src="./images/podu.png" alt="logo" width="10%" height="10%" style="margin-top:2%">
+                <h1 style="color:white;" id="heading">Time Pass</h1>
+            </center>
+        </div>
+    </div>
+    <div class="row fullwidth" style="margin-left:0px;margin-right:0px;margin-top:5px;">
+            <div class="col-md-6">
+                    <center class=" roundborder">
+                        <br>
+                        <h2>Login</h2>
+                        <hr>
+                        <label for="loginemailid">Email:</label><br>
+                        <input type="email" name="loginemailid" id="loginemailid" placeholder="Enter Email ID" style="text-align:center;"><br>
+                        <h6 id="loginvemail" style="color:red;display:none;">Please Enter valid Email ID</h6><br>
+                        
+                        <label for="loginpassword">Password:</label><br>
+                        <input type="password" name="loginpassword" id="loginpassword" placeholder="Enter Password" style="text-align:center;"><br>
+                        <h6 id="loginvpassword" style="color:red;display:none;">Please Enter valid Password(Min 8 Character)</h6><br>
+                        
+                        <button type="submit" id="login" class="btn btn-danger">Log In</button><br><br>
+                    </center>
+            </div>
+            <div class="col-md-6">
+                <center class="roundborder">
+                    <br>
+                    <h2>Register</h2>
+                    <hr>
+                    
+                    <label for="regemail">Email:</label><br>
+                    <input type="email" class="inp80" name="regemail" id="regemail" placeholder="Enter Email ID" style="text-align:center;"><br>
+                    <h6 id="regemailalert" style="color:red;display:none;">Please Enter valid Email Id</h6>
+                    <h6 id="regemailalert2" style="color:red;display:none;">This Email Id is already Signed Up</h6><br>
+                    
+                    <label for="regpassword">Password:</label><br>
+                    <input type="password" class="inp80" name="regpassword" id="regpassword" placeholder="Enter Password" style="text-align:center;"><br>
+                    <h6 id="regpasswordalert" style="color:red;display:none;">Please Enter valid Password(Min 8 character)</h6><br>
+                    
+                    <label for="regcpassword">Confirm Password:</label><br>
+                    <input type="password" class="inp80" name="regcpassword" id="regcpassword" placeholder="Enter Password" style="text-align:center;"><br>
+                    <h6 id="regcpasswordalert" style="color:red;display:none;">Both Password don't Match</h6><br>
+                    
+                    <label for="regscreenname">Screen Name:</label><br>
+                    <input type="text" class="inp80" name="regscreenname" id="regscreenname" placeholder="Enter Screen Name" style="text-align:center;"><br>
+                    <h6 id="regscreennamealert" style="color:red;display:none;">Please Enter different Screen Name</h6><br>
+                    
+                    <label for="reggender">Gender:</label>
+                    <input type="radio" name="reggender" id="regmale" value="male">Male
+                    <input type="radio" name="reggender" id="regfemale" value="female" checked>Female
+                    <br>
+                    <br>
+                    
+                    <label for="regprofile">Profile Picture:</label>
+                    <input type="file" name="regprofile" id="regprofile" accept="image/png"><br>
+                    <h6 id="regfilealert" style="color:red;display:none;">Please Select png or jpg format images</h6><br>
+                    
+                    <button type="submit" id="signup" class="btn btn-danger">Sign Up</button><br><br>
+                    
+                </center>
+            </div>
+    </div>
+</div>
+</body>
+</html>

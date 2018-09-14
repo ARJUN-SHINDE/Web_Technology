@@ -1,0 +1,131 @@
+* {
+    margin: 0%;
+    padding: 0%;
+}
+
+.fullscreen {
+    min-height: 100%;
+    min-width: 100%;
+    width: 100%;
+    background-color: grey;
+    overflow-y: visible;
+}
+
+.table {
+    display: table;
+    width: 100%;
+    background-color: red;
+}
+
+.tablerow {
+    display: table-row;
+    background-color: blue;
+    width: 100%;
+}
+
+.tablecell {
+    display: table-cell;
+    background-color: green;
+    overflow: hidden;
+    justify-content: center;
+    width: 100%;
+    vertical-align: middle;
+}
+
+.block {
+    display: inline-block;
+    align-self: center;
+}
+
+.pad10 {
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+}
+
+.roundborder {
+    border-radius: 25px;
+    background-color: #a3d7ef;
+    border: 2px solid black;
+    overflow-y: visible;
+    margin-bottom: 1%;
+}
+
+.ninety {
+    width: 94%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.center {
+    align-self: center;
+    margin: 0 auto;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.fullwidth {
+    width: 100%;
+}
+
+.wid40 {
+    width: 40%;
+}
+
+.wid60 {
+    width: 60%;
+}
+
+table {
+    width: 80%;
+    border-collapse: separate;
+    border-spacing: 10px;
+}
+
+input {
+    text-align: center;
+    font-size: 15px;
+    height: 25px;
+}
+
+select {
+    text-align: center;
+    font-size: 15px;
+    height: 25px;
+    max-width: 100px;
+}
+
+.marr {
+    padding-bottom: 10px;
+}
+
+h5 {
+    color: red;
+}
+
+#rollalert {
+    display: none;
+}
+
+#be {
+    display: none;
+}
+
+#me {
+    display: none;
+}
+
+button {
+    font-size: 25px;
+    background-clip: red;
+    padding: 2px 2px;
+}

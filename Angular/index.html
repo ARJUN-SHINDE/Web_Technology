@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<script src="./angular.min.js"></script>
+<center>
+
+    <head>
+
+        <h1>Register Student</h1>
+
+    </head>
+
+    <body ng-app="">
+
+        <form action="" method="POST" name="myForm">
+            <span><h2>Username</h2><input type="text" name="name" ng-model="name" required><br>
+            <span ng-show="myForm.name.$touched && myForm.name.$invalid">The name is required.</span></span>
+            <span><h2>Password</h2><input type="text" name="pass" ng-model="pass" required><br>
+            <span ng-show="myForm.pass.$touched && myForm.pass.$invalid">The name is required.</span></span><br>
+            <span><input type="submit" value="Save Data" ng-disabled="myForm.name.$invalid || myForm.pass.$invalid"><br><br>
+            <span ></span></span>
+        </form>
+    </body>
+</center>
+
+</html>
